@@ -1,2 +1,2 @@
 # innovisionNSIT
-An A/B Testing framework made in Hackathon at NSIT.
+An A/B Testing framework in development at Hackathon at NSIT.
