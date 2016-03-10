@@ -1,20 +1,29 @@
-<!DOCTYPE html>
-<head>
+<link rel="stylesheet" type="text/css" href="{% static './css/bootstrap.min.css' %}">
     <title>Statistics</title>
 </head>
-<body>
-    <table>
-        <thead>
-        <td>User Count</td><td>Buy Clicks</td><td>Conversion Ratio</td><td>Conversion Rate</td>
-        </thead>
-        <tbody>
-        <tr>
-            <td>{{ stat1_visit }}</td><td>{{ stat1_buy }}</td><td>{{ purchase_ratio1 }}</td><td>{{ conversion_rate1 }}%</td>
-        </tr>
-        <tr>
-            <td>{{ stat2_visit }}</td><td>{{ stat2_buy }}</td><td>{{ purchase_ratio2 }}</td><td>{{ conversion_rate2 }}%</td>
-        </tr>
 
-        </tbody>
-    </table>
+<body>
+
+<div class="container">
+             
+  <table class="table">
+    <thead>
+      <tr>
+        <th>User Count/th>
+        <th>Buy CLicks</th>
+        <th>Conversion Ratio</th>
+        <th>Conversion Rates</th>
+      </tr>
+    </thead>
+    <tbody>
+      	<td>{{ stat1_visit }}</td><td>{{ stat1_buy }}</td><td>{{ purchase_ratio1 }}</td><td>{{ conversion_rate1 }}%</td>
+      </tr>
+      <tr class="success">
+            <td>{{ stat2_visit }}</td><td>{{ stat2_buy }}</td><td>{{ purchase_ratio2 }}</td><td>{{ conversion_rate2 }}%</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 </body>
+</html>
