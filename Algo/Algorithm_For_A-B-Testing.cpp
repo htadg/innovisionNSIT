@@ -1,6 +1,8 @@
 #include "iostream"
 #include "stdio.h"
 #include "stdlib.h"
+#include "time.h"
+
 using namespace std;
 
 int data[10000][3] = {0};
@@ -8,7 +10,8 @@ int pos=0;
 
 int populator(int usrCount,float splt)
 {
-	cout<<"Split Value = "<<splt*usrCount<<"\n";
+	srand (time(NULL));
+	cout<<"Split Value = "<<splt<<"\n";
 	for (int j=0,i = pos; i <= usrCount+pos; ++i,j++)
 	{
 		data[i][0]=i+1;
@@ -41,7 +44,9 @@ int data_disp()
 	{
 		if(data[i][0]<10)cout<<"0"<<data[i][0];
 		else cout<<data[i][0];
-		cout<<" "<<data[i][1]<<" "<<data[i][2]<<"\n";
+		cout<<"     "<<data[i][1]<<"     ";
+		if(data[i][2]==1)cout<<"YES\n";
+			else cout<<"NO\n";
 	}
 
 	cout<<"Preference Rate\nWebpage 1 = "<<choicefinder()*100<<"\nWebpage 2 = "<<100-choicefinder()*100<<"\n";
@@ -53,5 +58,10 @@ int main()
 
 	populator(20,0.5);
 	data_disp();
-	
+
+	while(1){
+	cin.get();
+	populator(20,choicefinder());
+	data_disp();
+	}
 }
