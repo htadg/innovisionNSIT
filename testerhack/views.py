@@ -20,9 +20,15 @@ else:
     stat2 = AnalyticsTwo.objects.filter(id=1)[0]
 
 
-purchase_ratio1 = float(stat1.buy) / float(stat1.visit)
-purchase_ratio2 = float(stat2.buy) / float(stat2.visit)
-suggestion = int(purchase_ratio2*100/(purchase_ratio2+purchase_ratio1))
+def suggest():
+    global purchase_ratio1
+    global purchase_ratio2
+    global suggestion
+    purchase_ratio1 = float(stat1.buy) / float(stat1.visit)
+    purchase_ratio2 = float(stat2.buy) / float(stat2.visit)
+    suggestion = int(purchase_ratio2*100/(purchase_ratio2+purchase_ratio1))
+    return  suggestion
+
 
 def populatemy():
     startUser = "user"
@@ -101,7 +107,7 @@ def dash(request):
     global setting
     context = {
         'value': setting.percentage,
-        'suggestion': suggestion
+        'suggestion': suggest()
     }
     if request.method == "GET":
         return render(request, 'dash.html', context)
@@ -133,6 +139,7 @@ def login_user(request):
             if UsersRedirect.objects.filter(username=request.POST['username']) and UsersRedirect.objects.filter(password=request.POST['password']) :
                 print "user matched"
                 user = authenticate(username=request.POST['username'], password=request.POST['password'])
+                print "user authenticated"
                 login(request, user)
                 return redirect('/')
             else:
