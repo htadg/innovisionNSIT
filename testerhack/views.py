@@ -9,6 +9,7 @@ percentage = 50
 siteTwo = 'page1.html'
 siteOne = 'page2.html'
 
+
 if not SettingsUser.objects.all().count() > 0:
     setting = SettingsUser.objects.create(id=1, percentage = percentage)
     stat1 = AnalyticsOne.objects.create(id=1)
@@ -18,6 +19,10 @@ else:
     stat1 = AnalyticsOne.objects.filter(id=1)[0]
     stat2 = AnalyticsTwo.objects.filter(id=1)[0]
 
+
+purchase_ratio1 = float(stat1.buy) / float(stat1.visit)
+purchase_ratio2 = float(stat2.buy) / float(stat2.visit)
+suggestion = int(purchase_ratio2*100/(purchase_ratio2+purchase_ratio1))
 
 def populatemy():
     startUser = "user"
@@ -95,7 +100,8 @@ def dash(request):
         return redirect('/')
     global setting
     context = {
-        'value': setting.percentage
+        'value': setting.percentage,
+        'suggestion': suggestion
     }
     if request.method == "GET":
         return render(request, 'dash.html', context)
@@ -168,5 +174,4 @@ def statistics(request):
             'conversion_rate1': purchase_ratio1*100,
             'conversion_rate2': purchase_ratio2*100
         }
-        print context
         return render(request, 'statistics.html', context)
