@@ -1,13 +1,22 @@
 from django.shortcuts import render, redirect
-from .models import UsersRedirect
+from .models import UsersRedirect, SettingsUser, AnalyticsTwo, AnalyticsOne
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 
 # Create your views here.
 
 percentage = 50
-siteOne = 'page1.html'
-siteTwo = 'page2.html'
+siteTwo = 'page1.html'
+siteOne = 'page2.html'
+
+if not SettingsUser.objects.all().count() > 0:
+    setting = SettingsUser.objects.create(id=1, percentage = percentage)
+    stat1 = AnalyticsOne.objects.create(id=1)
+    stat2 = AnalyticsTwo.objects.create(id=1)
+else:
+    setting = SettingsUser.objects.filter(id=1)[0]
+    stat1 = AnalyticsOne.objects.filter(id=1)[0]
+    stat2 = AnalyticsTwo.objects.filter(id=1)[0]
 
 
 def populatemy():
@@ -30,8 +39,8 @@ def populatedjango():
 
 def update_users():
     allUsers = UsersRedirect.objects.all()
-    no_of_users = allUsers.count()
-    base_line = int(no_of_users*percentage/100)
+    no_of_users = int(allUsers.count())
+    base_line = int(no_of_users*int(percentage)/100)
     print base_line
     new_site_users = allUsers[:base_line]
     for a in new_site_users:
@@ -42,6 +51,10 @@ def update_users():
 
 
 def home(request):
+
+    global stat1
+    global stat2
+
     if not UsersRedirect.objects.all().count() >= 45:
         populatemy()
     if not User.objects.all().count() >= 45:
@@ -52,12 +65,25 @@ def home(request):
     current_user = request.user
 
     if not current_user.is_authenticated():
-        return redirect('/dash')
+        return redirect('/login')
+
+    if request.method == "POST":
+        if UsersRedirect.objects.filter(username=request.user.username)[0].site == 1:
+            stat2.buy += 1
+            stat2.save()
+        else:
+            stat1.buy += 1
+            stat1.save()
+        return render(request, 'thanks.html')
 
     if UsersRedirect.objects.filter(username=request.user.username).count() > 0 :
         if UsersRedirect.objects.filter(username=request.user.username)[0].site == 1 :
+            stat2.visit += 1
+            stat2.save()
             return render(request, siteOne)
         else:
+            stat1.visit += 1
+            stat1.save()
             return render(request, siteTwo)
 
     if current_user.is_superuser:
@@ -65,8 +91,21 @@ def home(request):
 
 
 def dash(request):
-
-    return render(request, 'dash.html', context={'name' : request.user.username})
+    if not request.user.is_superuser:
+        return redirect('/')
+    global setting
+    context = {
+        'value': setting.percentage
+    }
+    if request.method == "GET":
+        return render(request, 'dash.html', context)
+    elif request.method == "POST":
+        global percentage
+        percentage = request.POST['percent']
+        setting.percentage = percentage
+        setting.save()
+        update_users()
+        return redirect('/dash/')
 
 
 def login_user(request):
@@ -101,3 +140,33 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('/login/')
+
+
+def pageOne(request):
+    return render(request, siteOne)
+
+def pageTwo(request):
+    return render(request, siteTwo)
+
+def statistics(request):
+
+    global stat1
+    global stat2
+
+    if not request.user.is_superuser:
+        return redirect('/')
+    else:
+        purchase_ratio1 = float(stat1.buy) / float(stat1.visit)
+        purchase_ratio2 = float(stat2.buy) / float(stat2.visit)
+        context={
+            'stat1_visit': stat1.visit,
+            'stat1_buy': stat1.buy,
+            'stat2_visit': stat2.visit,
+            'stat2_buy': stat2.buy,
+            'purchase_ratio1': purchase_ratio1,
+            'purchase_ratio2': purchase_ratio2,
+            'conversion_rate1': purchase_ratio1*100,
+            'conversion_rate2': purchase_ratio2*100
+        }
+        print context
+        return render(request, 'statistics.html', context)

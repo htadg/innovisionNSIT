@@ -16,7 +16,7 @@
     <link href="{% static './css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="css/portfolio-item.css" rel="stylesheet">
+    <link href="{% static './css/portfolio-item.css' %}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -85,7 +85,9 @@
                 <h3>Items Description</h3>
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
                 <br>
-                <a target="_blank" href="#" class="btn-success btn-lg">Buy Now</a>
+                <form action="" method="POST">{% csrf_token %}
+                    <input type="submit" value="Buy Now" class="btn-success btn-large">
+                </form>
 
             </div>
 
@@ -140,7 +142,7 @@
     <!-- /.container -->
 
     <!-- jQuery -->
-    <script src="js/jquery.js"></script>
+    <script src="{% static './js/jquery.js' %}"></script>
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{% static './js/bootstrap.min.js' %}"></script>

@@ -14,17 +14,18 @@ class UsersRedirect(models.Model):
         return self.username
 
 
-class Settings(models.Model):
+class SettingsUser(models.Model):
+    id = models.IntegerField(default = 1, primary_key=True)
     percentage = models.IntegerField(default=50)
-    org_site = models.URLField()
-    new_site = models.URLField()
 
 
 class AnalyticsOne(models.Model):
-    hit = models.IntegerField(default=0)
+    id = models.IntegerField(default = 1, primary_key=True)
+    visit = models.IntegerField(default=0)
     buy = models.IntegerField(default=0)
 
 
 class AnalyticsTwo(models.Model):
-    hit = models.IntegerField(default=0)
+    id = models.IntegerField(default = 1, primary_key=True)
+    visit = models.IntegerField(default=0)
     buy = models.IntegerField(default=0)

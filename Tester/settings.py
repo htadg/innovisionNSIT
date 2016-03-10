@@ -25,7 +25,7 @@ SECRET_KEY = 'updvudd!qc0@n1p0*ig#ybx1frx!5p+6@s^t@8o_b^m2j_+!8s'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -107,3 +107,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+STATIC_ROOT= os.path.join(BASE_DIR,'static_media/')
